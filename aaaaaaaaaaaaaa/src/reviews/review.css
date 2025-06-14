@@ -88,7 +88,10 @@
   color: red;
   margin-top: 10px;
 }
-
+.review-success{
+  color: green;
+  margin-top: 10px;
+}
 .review-average-rating {
   font-size: 48px;
   font-weight: bold;

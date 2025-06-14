@@ -1,48 +1,53 @@
-
-import { useState, useEffect } from "react"
-import axios from "axios"
-import "./review.css"
+import { useState, useEffect } from "react";
+import axios from "axios";
+import "./review.css";
 
 function Review() {
-  const [rating, setRating] = useState("")
-  const [comment, setComment] = useState("")
-  const [average, setAverage] = useState(null)
-  const [error, setError] = useState("")
-
+  const [rating, setRating] = useState("");
+  const [comment, setComment] = useState("");
+  const [average, setAverage] = useState(null);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   useEffect(() => {
-    fetchAverage()
-  }, [])
+    fetchAverage();
+  }, []);
 
   const fetchAverage = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getavg")
-      setAverage(response.data)
+      const response = await axios.get("http://localhost:8080/getavg");
+      setAverage(response.data);
     } catch (err) {
-      console.error("Error fetching average:", err)
+      console.error("Error fetching average:", err);
     }
-  }
+  };
 
   const handleSubmit = async () => {
-    const parsedRating = Number.parseFloat(rating)
-    if ( parsedRating < 0 || parsedRating > 5) {
-      setError("Rating must be a number between 0 and 5 .")
-      return
+    if (rating === "") {
+      setError("Rating is required.");
+      return;
+    }
+    const parsedRating = Number.parseFloat(rating);
+    if (parsedRating < 0 || parsedRating > 5) {
+      setError("Rating must be a number between 0 and 5 .");
+      return;
     }
 
-    setError("")
+    setError("");
     try {
-      await axios.post("http://localhost:8080/postreview", {
+      const response=await axios.post("http://localhost:8080/postreview", {
         review: parsedRating,
         comment,
-      })
-
-      setRating("")
-      setComment("")
-      fetchAverage()
-    } catch (err) {
-      console.error("Error submitting review:", err)
+      });
+      if(response.data === "success") {
+      setSuccessMessage("Thank you for giving your review!");
     }
-  }
+      setRating("");
+      setComment("");
+      fetchAverage();
+    } catch (err) {
+      console.error("Error in submitting review:", err);
+    }
+  };
 
   return (
     <div className="review-main-container">
@@ -65,27 +70,32 @@ function Review() {
 
           <label>
             Comment:
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
           </label>
 
           <button onClick={handleSubmit}>Submit Review</button>
-
+          {successMessage && <p className="review-success">{successMessage}</p>}
           {error && <p className="review-error">{error}</p>}
-        </div>
+        </div>  
 
         <div className="review-box review-average-box">
           <h2>CURRENT AVERAGE RATING</h2>
-          <p className="review-average-rating">{average !== null ? average.toFixed(1) : "Loading..."}</p>
+          <p className="review-average-rating">
+            {average !== null ? average.toFixed(1) : "Loading..."}
+          </p>
           <p className="review-thank-you">
             Thank you for choosing TRANZY!
             <br />
-            Your feedback helps us maintain our high standards and continue providing excellent service to all our
-            customers.
+            Your feedback helps us maintain our high standards and continue
+            providing excellent service to all our customers.
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Review
+export default Review;
