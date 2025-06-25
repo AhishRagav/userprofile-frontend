@@ -18,7 +18,7 @@ function ForgotPassword({ onBackToChangePassword }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/send-email", {
+      const response = await axios.post("http://localhost:8086/send-email", {
         email,
       })
       setStatus(response.data)
@@ -34,7 +34,7 @@ function ForgotPassword({ onBackToChangePassword }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/changewith-otp", {
+      const response = await axios.post("http://localhost:8086/changewith-otp", {
         email,
         otp,
         password,
