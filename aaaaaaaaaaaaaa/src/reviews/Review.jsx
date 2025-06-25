@@ -14,7 +14,7 @@ function Review() {
 
   const fetchAverage = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/getavg");
+      const response = await axios.get("http://localhost:8086/getavg");
       setAverage(response.data);
     } catch (err) {
       console.error("Error fetching average:", err);
@@ -34,7 +34,7 @@ function Review() {
 
     setError("");
     try {
-      const response=await axios.post("http://localhost:8080/postreview", {
+      const response=await axios.post("http://localhost:8086/postreview", {
         review: parsedRating,
         comment,
       });
