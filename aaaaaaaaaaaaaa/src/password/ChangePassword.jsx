@@ -17,7 +17,7 @@ function ChangePassword({ onForgotPasswordClick }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/changepassword", {
+      const response = await axios.post("http://localhost:8086/changepassword", {
         username,
         oldpassword,
         newpassword,
